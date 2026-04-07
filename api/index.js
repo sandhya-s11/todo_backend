@@ -28,7 +28,12 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.get('/status', (req, res) => res.json({ status: 'OK', message: 'Server is running.' }));
+app.get('/status', (req, res) => res.json({
+  status: 'OK',
+  message: 'Server is running.',
+  db: process.env.MONGODB_URI ? 'URI is set' : 'URI is MISSING',
+  jwt: process.env.JWT_SECRET ? 'JWT is set' : 'JWT is MISSING'
+}));
 app.use('/auth', authRoute);
 app.use('/tasks', route);
 
