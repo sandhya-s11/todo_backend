@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const tasksSchema = new mongoose.Schema(
   {
@@ -8,5 +8,4 @@ const tasksSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const tasksCollection = mongoose.model('tasks', tasksSchema);
-export default tasksCollection;
+module.exports = mongoose.model('tasks', tasksSchema);

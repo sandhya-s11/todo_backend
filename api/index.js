@@ -1,18 +1,17 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import authRoute from '../Routes/authRoutes.js';
-import route from '../Routes/routes.js';
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const authRoute = require('../Routes/authRoutes');
+const route = require('../Routes/routes');
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
-// DB connect (cached for serverless)
 let isConnected = false;
 const connectDB = async () => {
   if (isConnected) return;
@@ -21,12 +20,16 @@ const connectDB = async () => {
 };
 
 app.use(async (req, res, next) => {
-  await connectDB();
-  next();
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ message: 'DB connection failed.', error: err.message });
+  }
 });
 
 app.get('/status', (req, res) => res.json({ status: 'OK', message: 'Server is running.' }));
 app.use('/auth', authRoute);
 app.use('/tasks', route);
 
-export default app;
+module.exports = app;

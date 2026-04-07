@@ -1,14 +1,13 @@
-import express from 'express';
-import { addToDo, getToDo, updateToDo, deleteToDo } from '../Controller/controller.js';
-import authMiddleware from '../Middleware/authMiddleware.js';
+const express = require('express');
+const { addToDo, getToDo, updateToDo, deleteToDo } = require('../Controller/controller');
+const authMiddleware = require('../Middleware/authMiddleware');
 
-const route = express.Router();
+const router = express.Router();
 
-route.use(authMiddleware); // all task routes require auth
+router.use(authMiddleware);
+router.post('/addtodo', addToDo);
+router.get('/gettodo', getToDo);
+router.patch('/updatetodo/:id', updateToDo);
+router.delete('/deletetodo/:id', deleteToDo);
 
-route.post('/addtodo', addToDo);
-route.get('/gettodo', getToDo);
-route.patch('/updatetodo/:id', updateToDo);
-route.delete('/deletetodo/:id', deleteToDo);
-
-export default route;
+module.exports = router;
